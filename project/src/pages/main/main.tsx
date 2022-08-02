@@ -1,24 +1,18 @@
 import React from 'react';
-import FilmCard from '../../components/film-card/film-card';
 import Footer from '../../components/footer/footer';
+import ListFilms from '../../components/list-films/list-films';
 import Logo from '../../components/logo/logo';
-
-function severalFilmCards(cardCount: number) {
-  const filmCards = [];
-  for (let i = 0; i < cardCount; i++) {
-    filmCards.push(<FilmCard key = {i}/>);
-  }
-
-  return filmCards;
-}
+import {Films} from '../../types/film';
 
 type mainFilmInfo = {
   mainFilmName: string;
   mainFilmGenre: string;
   mainFilmDate: number;
+  films: Films;
 }
 
-export default function Main({mainFilmName, mainFilmGenre, mainFilmDate}: mainFilmInfo): JSX.Element {
+export default function Main(props: mainFilmInfo): JSX.Element {
+  const {mainFilmName, mainFilmGenre, mainFilmDate, films} = props;
   return(
     <React.Fragment>
       <div className="visually-hidden">
@@ -149,9 +143,9 @@ export default function Main({mainFilmName, mainFilmGenre, mainFilmDate}: mainFi
             </li>
           </ul>
 
-          <div className="catalog__films-list">
-            {severalFilmCards(20)}
-          </div>
+          <ListFilms
+            films={films}
+          />
 
           <div className="catalog__more">
             <button className="catalog__button" type="button">Show more</button>
