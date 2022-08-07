@@ -1,5 +1,5 @@
-import { useParams } from 'react-router-dom';
-import { ListFilmsType } from '../../types/film';
+import {useParams} from 'react-router-dom';
+import {ListFilmsType} from '../../types/film';
 
 export default function Player({films}: ListFilmsType) {
   const filmId = Number(useParams().id);
