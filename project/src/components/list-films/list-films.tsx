@@ -1,10 +1,11 @@
 import {useState} from 'react';
 import FilmCard from '../film-card/film-card';
-import {ListFilmsType} from '../../types/film';
+import {useAppSelector} from '../../hooks';
 
 
-export default function ListFilms ({films}: ListFilmsType): JSX.Element{
+export default function ListFilms (): JSX.Element{
 
+  const films = useAppSelector((state) => state.films);
   const [activeId, setActiveId] = useState({
     id: '',
   });

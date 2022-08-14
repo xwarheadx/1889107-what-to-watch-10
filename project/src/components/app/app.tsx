@@ -1,6 +1,7 @@
 import {Route, BrowserRouter, Routes} from 'react-router-dom';
 import PrivateRoute from '../private-route/private-route';
 import {AppRoute, AuthorizationStatus} from '../../const';
+import FilterGenres from '../filter-genres/filter-genres';
 import PageNotFound404 from '../../pages/page-not-found-404/page-not-found-404';
 import AddReview from '../../pages/add-review/add-review';
 import Main from '../../pages/main/main';
@@ -24,8 +25,15 @@ export default function App({mainFilmName, mainFilmGenre, mainFilmDate, films}: 
         <Route
           path={AppRoute.Main}
           element = {
-            <Main mainFilmName = {mainFilmName} mainFilmGenre = {mainFilmGenre} mainFilmDate = {mainFilmDate} films={films}/>
+            <Main mainFilmName = {mainFilmName} mainFilmGenre = {mainFilmGenre} mainFilmDate = {mainFilmDate}/>
           }
+        />
+        <Route
+          path='/:id'
+          element =
+            {
+              <FilterGenres/>
+            }
         />
         <Route
           path={AppRoute.Film}
@@ -41,7 +49,7 @@ export default function App({mainFilmName, mainFilmGenre, mainFilmDate, films}: 
             <PrivateRoute
               authorizationStatus={AuthorizationStatus.NoAuth}
             >
-              <MyList films={films}/>
+              <MyList />
             </PrivateRoute>
           }
         />
