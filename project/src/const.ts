@@ -12,3 +12,4 @@ export enum AuthorizationStatus {
       NoAuth = 'NO_AUTH',
       Unknown = 'UNKNOWN',
     }
+export const COUNT_RENDER_FILMS = 8;
