@@ -38,11 +38,7 @@ export const reducer = createReducer(initialState, (builder) => {
       state.filmsForRender = state.filmsFilteredGenre.slice(0, newRenderedMovieCount);
       state.countRenderedFilms = newRenderedMovieCount;
       const filmsCount = state.filmsFilteredGenre.length;
-      if (filmsCount > state.countRenderedFilms) {
-        state.isShowMoreButtonRendered = true;
-      } else {
-        state.isShowMoreButtonRendered = false;
-      }
+      state.isShowMoreButtonRendered = filmsCount > state.countRenderedFilms;
     })
     .addCase(resetFilterGenreAction, (state) => {
       state.genre = 'All genres';

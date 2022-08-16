@@ -10,7 +10,7 @@ export function ShowMoreButton () {
   };
   return (
     <div className="catalog__more">
-      <button onClick={clickButtonHandler} className={isButtonRendered ? 'catalog__button' : 'visually-hidden'} type="button">Show more</button>
+      <button className={isButtonRendered ? 'catalog__button' : 'visually-hidden'} type="button" onClick={clickButtonHandler} >Show more</button>
     </div>
   );
 }

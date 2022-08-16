@@ -12,7 +12,7 @@ function FilterGenres () {
   const clickHandler = (evt: React.MouseEvent<HTMLLIElement>) => {
     evt.preventDefault();
     const dataAttribute = evt.currentTarget.getAttribute('data-genre');
-    setElementLi(String(dataAttribute));
+    setElementLi(String());
     dispatch(chengeGenreAction(String(dataAttribute)));
     dispatch(getFilmsWithGenreAction());
   };
@@ -20,34 +20,34 @@ function FilterGenres () {
   return (
     <>
       <ul className="catalog__genres-list">
-        <li onClick={clickHandler} data-genre='All genres' className={elementLi === 'All genres' ? 'catalog__genres-item catalog__genres-item--active' : 'catalog__genres-item'}>
+        <li data-genre='All genres' className={elementLi === 'All genres' ? 'catalog__genres-item catalog__genres-item--active' : 'catalog__genres-item'} onClick={clickHandler}>
           <Link to="/" className="catalog__genres-link">All genres</Link>
         </li>
-        <li onClick={clickHandler} data-genre='Comedies' className={elementLi === 'Comedies' ? 'catalog__genres-item catalog__genres-item--active' : 'catalog__genres-item'}>
+        <li data-genre='Comedies' className={elementLi === 'Comedies' ? 'catalog__genres-item catalog__genres-item--active' : 'catalog__genres-item'} onClick={clickHandler}>
           <Link to="/" className="catalog__genres-link">Comedies</Link>
         </li>
-        <li onClick={clickHandler} data-genre='Crime' className={elementLi === 'Crime' ? 'catalog__genres-item catalog__genres-item--active' : 'catalog__genres-item'}>
+        <li data-genre='Crime' className={elementLi === 'Crime' ? 'catalog__genres-item catalog__genres-item--active' : 'catalog__genres-item'} onClick={clickHandler}>
           <Link to="/" className="catalog__genres-link">Crime</Link>
         </li>
-        <li onClick={clickHandler} data-genre='Documentary' className={elementLi === 'Documentary' ? 'catalog__genres-item catalog__genres-item--active' : 'catalog__genres-item'}>
+        <li data-genre='Documentary' className={elementLi === 'Documentary' ? 'catalog__genres-item catalog__genres-item--active' : 'catalog__genres-item'} onClick={clickHandler}>
           <Link to="/" className="catalog__genres-link">Documentary</Link>
         </li>
-        <li onClick={clickHandler} data-genre='Dramas' className={elementLi === 'Dramas' ? 'catalog__genres-item catalog__genres-item--active' : 'catalog__genres-item'}>
+        <li data-genre='Dramas' className={elementLi === 'Dramas' ? 'catalog__genres-item catalog__genres-item--active' : 'catalog__genres-item'} onClick={clickHandler} >
           <Link to="/" className="catalog__genres-link">Dramas</Link>
         </li>
-        <li onClick={clickHandler} data-genre='Horror' className={elementLi === 'Horror' ? 'catalog__genres-item catalog__genres-item--active' : 'catalog__genres-item'}>
+        <li data-genre='Horror' className={elementLi === 'Horror' ? 'catalog__genres-item catalog__genres-item--active' : 'catalog__genres-item'} onClick={clickHandler}>
           <Link to="/" className="catalog__genres-link">Horror</Link>
         </li>
-        <li onClick={clickHandler} data-genre='Kids & Family' className={elementLi === 'Kids & Family' ? 'catalog__genres-item catalog__genres-item--active' : 'catalog__genres-item'}>
+        <li data-genre='Kids & Family' className={elementLi === 'Kids & Family' ? 'catalog__genres-item catalog__genres-item--active' : 'catalog__genres-item'} onClick={clickHandler}>
           <Link to="/" className="catalog__genres-link">Kids & Family</Link>
         </li>
-        <li onClick={clickHandler} data-genre='Romance' className={elementLi === 'Romance' ? 'catalog__genres-item catalog__genres-item--active' : 'catalog__genres-item'}>
+        <li data-genre='Romance' className={elementLi === 'Romance' ? 'catalog__genres-item catalog__genres-item--active' : 'catalog__genres-item'} onClick={clickHandler}>
           <Link to="/" className="catalog__genres-link">Romance</Link>
         </li>
-        <li onClick={clickHandler} data-genre='Sci-Fi' className={elementLi === 'Sci-Fi' ? 'catalog__genres-item catalog__genres-item--active' : 'catalog__genres-item'}>
+        <li data-genre='Sci-Fi' className={elementLi === 'Sci-Fi' ? 'catalog__genres-item catalog__genres-item--active' : 'catalog__genres-item'} onClick={clickHandler}>
           <Link to="/" className="catalog__genres-link">Sci-Fi</Link>
         </li>
-        <li onClick={clickHandler} data-genre='Thrillers' className={elementLi === 'Thrillers' ? 'catalog__genres-item catalog__genres-item--active' : 'catalog__genres-item'}>
+        <li data-genre='Thrillers' className={elementLi === 'Thrillers' ? 'catalog__genres-item catalog__genres-item--active' : 'catalog__genres-item'} onClick={clickHandler}>
           <Link to="/" className="catalog__genres-link">Thrillers</Link>
         </li>
       </ul>
