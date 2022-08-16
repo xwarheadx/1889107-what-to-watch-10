@@ -16,7 +16,7 @@ export default function FilmCard ({item}: CardType): JSX.Element{
 
   return(
     <article className="small-film-card catalog__films-card">
-      <div onMouseOver={focusAndBlurHandler} onMouseOut={focusAndBlurHandler} id={`${id}`} className="small-film-card__image">
+      <div id={`${id}`} className="small-film-card__image" onMouseOver={focusAndBlurHandler} onMouseOut={focusAndBlurHandler}>
         {isFosued ? <VideoPlayer video={video} src={src}></VideoPlayer> : <img src={src} alt={name} width="280" height="175" />}
       </div>
       <h3 className="small-film-card__title">

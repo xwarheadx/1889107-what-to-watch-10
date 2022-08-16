@@ -24,7 +24,7 @@ export default function ListFilms (): JSX.Element{
   return (
     <>
       <div className='catalog__films-list' onMouseOver={mouseOverHandler}>
-        {films.map((film) => <FilmCard item={film} key={film.src}></FilmCard>)}
+        {films.map((film) => <FilmCard item={film} key={film.src} />)}
       </div>
       <ShowMoreButton />
     </>
