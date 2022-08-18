@@ -30,10 +30,7 @@ export default function App({mainFilmName, mainFilmGenre, mainFilmDate, films}: 
         />
         <Route
           path='/:id'
-          element =
-            {
-              <FilterGenres/>
-            }
+          element = {<FilterGenres/>}
         />
         <Route
           path={AppRoute.Film}
