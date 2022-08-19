@@ -1,9 +1,11 @@
 import {Link, useParams} from 'react-router-dom';
+import {useAppSelector} from '../../hooks';
 import CommentForm from '../../components/comment-form/comment-form';
 import Logo from '../../components/logo/logo';
-import {ListFilmsType} from '../../types/film';
 
-export default function AddReview({films}: ListFilmsType) {
+
+export default function AddReview() {
+  const films = useAppSelector((state) => state.filmsForRender);
   const filmId = Number(useParams().id);
   const film = films.find((element) => element.id === filmId);
 
@@ -43,7 +45,7 @@ export default function AddReview({films}: ListFilmsType) {
         </header>
 
         <div className="film-card__poster film-card__poster--small">
-          <img src={film?.src} alt="The Grand Budapest Hotel poster" width="218" height="327" />
+          <img src={film?.posterImage} alt={film?.name} width="218" height="327" />
         </div>
       </div>
 

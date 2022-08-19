@@ -1,9 +1,11 @@
 import {Link, useParams} from 'react-router-dom';
 import Footer from '../../components/footer/footer';
 import Logo from '../../components/logo/logo';
-import {ListFilmsType} from '../../types/film';
+import { useAppSelector } from '../../hooks';
 
-export default function MoviePage ({films}: ListFilmsType) {
+export default function MoviePage () {
+
+  const films = useAppSelector((state) => state.filmsForRender);
   const filmId = Number(useParams().id);
   const film = films.find((element) => element.id === filmId);
   return (
@@ -11,7 +13,7 @@ export default function MoviePage ({films}: ListFilmsType) {
       <section className="film-card film-card--full">
         <div className="film-card__hero">
           <div className="film-card__bg">
-            <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel" />
+            <img src={film?.backgroundImage} alt={film?.name} />
           </div>
 
           <h1 className="visually-hidden">WTW</h1>
@@ -35,8 +37,8 @@ export default function MoviePage ({films}: ListFilmsType) {
             <div className="film-card__desc">
               <h2 className="film-card__title">{film?.name}</h2>
               <p className="film-card__meta">
-                <span className="film-card__genre">Drama</span>
-                <span className="film-card__year">2014</span>
+                <span className="film-card__genre">{film?.genre}</span>
+                <span className="film-card__year">{film?.released}</span>
               </p>
 
               <div className="film-card__buttons">
@@ -64,7 +66,7 @@ export default function MoviePage ({films}: ListFilmsType) {
         <div className="film-card__wrap film-card__translate-top">
           <div className="film-card__info">
             <div className="film-card__poster film-card__poster--big">
-              <img src={film?.src} alt="The Grand Budapest Hotel poster" width="218" height="327" />
+              <img src={film?.posterImage} alt={film?.name} width="218" height="327" />
             </div>
 
             <div className="film-card__desc">
@@ -83,21 +85,18 @@ export default function MoviePage ({films}: ListFilmsType) {
               </nav>
 
               <div className="film-rating">
-                <div className="film-rating__score">8,9</div>
+                <div className="film-rating__score">{film?.rating}</div>
                 <p className="film-rating__meta">
-                  <span className="film-rating__level">Very good</span>
-                  <span className="film-rating__count">240 ratings</span>
+                  <span className="film-rating__level">{film?.rating}</span>
+                  <span className="film-rating__count">{film?.scoresCount}</span>
                 </p>
               </div>
 
               <div className="film-card__text">
-                <p>{'In the 1930s, the Grand Budapest Hotel is a popular European ski resort, presided over by concierge Gustave H. (Ralph Fiennes). Zero, a junior lobby boy, becomes Gustave\'s friend and protege.'}</p>
+                <p>{film?.description}</p>
+                <p className="film-card__director"><strong>{film?.director}</strong></p>
 
-                <p>{'Gustave prides himself on providing first-className service to the hotel\'s guests, including satisfying the sexual needs of the many elderly women who stay there. When one of Gustave\'s lovers dies mysteriously, Gustave finds himself the recipient of a priceless painting and the chief suspect in her murder.'}</p>
-
-                <p className="film-card__director"><strong>Director: Wes Anderson</strong></p>
-
-                <p className="film-card__starring"><strong>Starring: Bill Murray, Edward Norton, Jude Law, Willem Dafoe and other</strong></p>
+                <p className="film-card__starring"><strong>{film?.starring}</strong></p>
               </div>
             </div>
           </div>

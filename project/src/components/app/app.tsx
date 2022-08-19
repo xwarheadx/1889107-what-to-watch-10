@@ -1,6 +1,8 @@
 import {Route, BrowserRouter, Routes} from 'react-router-dom';
-import PrivateRoute from '../private-route/private-route';
 import {AppRoute, AuthorizationStatus} from '../../const';
+import {useAppSelector} from '../../hooks';
+import {isCheckedAuth} from '../../reducer';
+import PrivateRoute from '../private-route/private-route';
 import FilterGenres from '../filter-genres/filter-genres';
 import PageNotFound404 from '../../pages/page-not-found-404/page-not-found-404';
 import AddReview from '../../pages/add-review/add-review';
@@ -9,16 +11,22 @@ import MoviePage from '../../pages/movie-page/movie-page';
 import MyList from '../../pages/my-list/my-list';
 import Player from '../../pages/player/player';
 import SignIn from '../../pages/sign-in/sign-in';
-import {Films} from '../../types/film';
+import LoadingScreen from '../../pages/loading-screen/loading-screen';
 
 type AppProps = {
   mainFilmName: string;
   mainFilmGenre: string;
   mainFilmDate: number;
-  films: Films;
 }
 
-export default function App({mainFilmName, mainFilmGenre, mainFilmDate, films}: AppProps): JSX.Element {
+export default function App({mainFilmName, mainFilmGenre, mainFilmDate}: AppProps): JSX.Element {
+  const {authorizationStatus, isDataLoaded} = useAppSelector((state) => state);
+
+  if (isCheckedAuth(authorizationStatus) || isDataLoaded) {
+    return (
+      <LoadingScreen />
+    );
+  }
   return (
     <BrowserRouter>
       <Routes>
@@ -34,11 +42,11 @@ export default function App({mainFilmName, mainFilmGenre, mainFilmDate, films}: 
         />
         <Route
           path={AppRoute.Film}
-          element = {<MoviePage films={films}/>}
+          element = {<MoviePage />}
         />
         <Route
           path={AppRoute.AddReview}
-          element = {<AddReview films={films}/>}
+          element = {<AddReview />}
         />
         <Route
           path={AppRoute.MyList}
@@ -52,7 +60,7 @@ export default function App({mainFilmName, mainFilmGenre, mainFilmDate, films}: 
         />
         <Route
           path={AppRoute.Player}
-          element = {<Player films={films}/>}
+          element = {<Player />}
         />
         <Route
           path={AppRoute.SignIn}

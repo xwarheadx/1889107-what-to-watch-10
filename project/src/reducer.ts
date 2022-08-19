@@ -1,16 +1,30 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {films} from './mocks/films';
-import {chengeGenreAction, getFilmsWithGenreAction, resetFilterGenreAction, getMoreFilms} from './action';
-import {COUNT_RENDER_FILMS} from './const';
+import {COUNT_RENDER_FILMS, AuthorizationStatus} from './const';
+import {chengeGenreAction, getFilmsWithGenreAction, resetFilterGenreAction, getMoreFilms, loadFilms, requireAuthorization, setError, setDataLoadedStatus} from './action';
+import {Films} from './types/film';
 
-const startRenderFilms = films.slice(0, COUNT_RENDER_FILMS);
-const initialState = {
+
+type InitialStateType = {
+  genre: string,
+  films: Films,
+  filmsFilteredGenre: Films,
+  isShowMoreButtonRendered: boolean,
+  countRenderedFilms: number,
+  filmsForRender: Films,
+  authorizationStatus: AuthorizationStatus,
+  error: string | null,
+  isDataLoaded: boolean,
+};
+const initialState : InitialStateType = {
   genre: 'All genres',
-  films: films,
-  filmsFilteredGenre: films,
-  isShowMoreButtonRendered: films.length > COUNT_RENDER_FILMS,
+  films: [],
+  filmsFilteredGenre: [],
+  isShowMoreButtonRendered: false,
   countRenderedFilms: COUNT_RENDER_FILMS,
-  filmsForRender: startRenderFilms,
+  filmsForRender: [],
+  authorizationStatus: AuthorizationStatus.Unknown,
+  error: null,
+  isDataLoaded: false,
 };
 
 export const reducer = createReducer(initialState, (builder) => {
@@ -20,9 +34,9 @@ export const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(getFilmsWithGenreAction, (state) => {
       if (state.genre === 'All genres') {
-        state.filmsFilteredGenre = films;
+        state.filmsFilteredGenre = state.films;
       } else {
-        state.filmsFilteredGenre = films.filter((film) => film.genre === state.genre);
+        state.filmsFilteredGenre = state.films.filter((film) => film.genre === state.genre);
       }
 
       const filmsCount = state.filmsFilteredGenre.length;
@@ -40,8 +54,25 @@ export const reducer = createReducer(initialState, (builder) => {
       const filmsCount = state.filmsFilteredGenre.length;
       state.isShowMoreButtonRendered = filmsCount > state.countRenderedFilms;
     })
+    .addCase(loadFilms, (state, action) => {
+      state.films = action.payload;
+      state.filmsFilteredGenre = state.films;
+      state.filmsForRender = state.films.slice(0, COUNT_RENDER_FILMS);
+      state.isShowMoreButtonRendered = state.films.length > COUNT_RENDER_FILMS;
+    })
+    .addCase(requireAuthorization, (state, action) => {
+      state.authorizationStatus = action.payload;
+    })
+    .addCase(setError, (state, action) => {
+      state.error = action.payload;
+    })
+    .addCase(setDataLoadedStatus, (state, action) => {
+      state.isDataLoaded = action.payload;
+    })
     .addCase(resetFilterGenreAction, (state) => {
       state.genre = 'All genres';
-      state.films = films;
     });
 });
+
+export const isCheckedAuth = (authorizationStatus: AuthorizationStatus): boolean =>
+  authorizationStatus === AuthorizationStatus.Unknown;
