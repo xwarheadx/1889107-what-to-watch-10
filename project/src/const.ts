@@ -13,3 +13,11 @@ export enum AuthorizationStatus {
       Unknown = 'UNKNOWN',
     }
 export const COUNT_RENDER_FILMS = 8;
+
+export enum APIRoute {
+    Films = '/films',
+    Login = '/login',
+    Logout = '/logout',
+  }
+
+export const TIMEOUT_SHOW_ERROR = 3000;

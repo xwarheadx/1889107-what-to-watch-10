@@ -2,10 +2,9 @@ import {useRef} from 'react';
 
 type VideoPlayerType = {
   video: string;
-  src: string;
 }
 
-function VideoPlayer ({video, src}: VideoPlayerType) {
+function VideoPlayer ({video}: VideoPlayerType) {
   const playRef = useRef<HTMLVideoElement>(null);
 
   const playVideoTimeout = () => {
@@ -14,7 +13,7 @@ function VideoPlayer ({video, src}: VideoPlayerType) {
   setTimeout(playVideoTimeout, 1000);
 
   return(
-    <video ref={playRef} src={video} muted loop width='280' height='175' poster={src}>
+    <video ref={playRef} src={video} muted loop width='280' height='175'>
 
     </video>
   );
