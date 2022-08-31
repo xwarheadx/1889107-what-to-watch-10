@@ -20,6 +20,25 @@ export type Film = {
 
 export type Films = Film[];
 
+export type ResponseComment = {
+  comment: string
+  date: string
+  id: number
+  rating: number
+  user: {
+  id: number
+  name: string
+  }
+};
+
+export type ResponseComments = ResponseComment[];
+
 export type ListFilmsType = {
   films: Films;
+}
+
+export type FavoriteFilmType = {
+  filmId: number;
+  status: number;
+  promoId: number;
 }

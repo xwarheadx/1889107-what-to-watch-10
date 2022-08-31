@@ -2,11 +2,12 @@ import {Link, useParams} from 'react-router-dom';
 import {useAppSelector} from '../../hooks';
 import CommentForm from '../../components/comment-form/comment-form';
 import Logo from '../../components/logo/logo';
-import UserAuthorization from '../../components/user-authorization/user-authorization';
+import {UserAuthorization} from '../../components/user-authorization/user-authorization';
+import {getFilmsForRender} from '../../store/film-data/selectors';
 
 
-export default function AddReview() {
-  const films = useAppSelector((state) => state.filmsForRender);
+function AddReview() {
+  const films = useAppSelector(getFilmsForRender);
   const filmId = Number(useParams().id);
   const film = films.find((element) => element.id === filmId);
 
@@ -14,7 +15,7 @@ export default function AddReview() {
     <section className="film-card film-card--full">
       <div className="film-card__header">
         <div className="film-card__bg">
-          <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel" />
+          <img src={film?.backgroundImage} alt={film?.name} />
         </div>
 
         <h1 className="visually-hidden">WTW</h1>
@@ -40,9 +41,11 @@ export default function AddReview() {
           <img src={film?.posterImage} alt={film?.name} width="218" height="327" />
         </div>
       </div>
-
-      <CommentForm/>
-
+      <div className="add-review">
+        <CommentForm/>
+      </div>
     </section>
   );
 }
+
+export default AddReview;

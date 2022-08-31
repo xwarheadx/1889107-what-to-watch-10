@@ -1,4 +1,4 @@
-import Footer from '../../components/footer/footer';
+import {Footer} from '../../components/footer/footer';
 import Logo from '../../components/logo/logo';
 export default function PageNotFound404(): JSX.Element {
   return (

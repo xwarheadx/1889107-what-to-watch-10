@@ -1,16 +1,20 @@
-import {getMoreFilms} from '../../action';
-import {useAppDisptach, useAppSelector} from '../../hooks';
+import {getMoreFilms} from '../../store/film-data/film-data';
+import {getIsRenderShowMoreButton} from '../../store/film-data/selectors';
+import {useAppDispatch, useAppSelector} from '../../hooks';
 
-export function ShowMoreButton () {
-  const isButtonRendered = useAppSelector((state) => state.isShowMoreButtonRendered);
-  const dispatch = useAppDisptach();
+type ShowMoreType = {
+  isMyListPage: boolean;
+};
 
+export function ShowMoreButton ({isMyListPage}: ShowMoreType) {
+  const isButtonRendered = useAppSelector(getIsRenderShowMoreButton);
+  const dispatch = useAppDispatch();
   const clickButtonHandler = () => {
     dispatch(getMoreFilms());
   };
   return (
     <div className="catalog__more">
-      {isButtonRendered && (<button className='catalog__button' type="button" onClick={clickButtonHandler}>Show more</button>)}
+      {isButtonRendered && (<button className={isButtonRendered ? 'catalog__button' : 'visually-hidden'} type="button" onClick={clickButtonHandler}>Show more</button>)}
     </div>
   );
 }

@@ -3,6 +3,7 @@ export enum AppRoute {
     MyList = '/mylist',
     SignIn = '/login',
     Film = '/films/:id',
+    Films = '/films',
     AddReview = '/films/:id/review',
     Player = '/player/:id',
     }
@@ -12,12 +13,30 @@ export enum AuthorizationStatus {
       NoAuth = 'NO_AUTH',
       Unknown = 'UNKNOWN',
     }
-export const COUNT_RENDER_FILMS = 8;
 
 export enum APIRoute {
-    Films = '/films',
-    Login = '/login',
-    Logout = '/logout',
-  }
+      Films = '/films',
+      Login = '/login',
+      Logout = '/logout',
+      Comment = '/comments',
+      Favorite = '/favorite',
+      Promo = '/promo',
+    }
 
-export const TIMEOUT_SHOW_ERROR = 3000;
+export enum NameSpace{
+      User = 'User',
+      Data = 'Data',
+      Process = 'Process',
+    }
+
+export enum ReviewTextValidation {
+      MinLength = 50,
+      MaxLength = 400,
+    }
+
+export const NUMBER_OF_STARS = 10;
+export const TIMEOUT_SHOW_ERROR = 2000;
+export const COUNT_RENDER_FILMS = 8;
+export const SIMILAR_FILMS_MAX_NUMBER = 4;
+export const TIME_OUT = 1000;
+export const MINS_IN_HOUR = 60;

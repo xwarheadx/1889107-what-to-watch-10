@@ -1,34 +1,41 @@
 import {Link} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus} from '../../const';
-import {useAppDisptach, useAppSelector} from '../../hooks';
+import {useAppDispatch, useAppSelector} from '../../hooks';
 import {logoutAction} from '../../store/api-action';
+import {getAuthorizationStatus, getUserData} from '../../store/user-process/selectors';
 
-export default function UserAuthorization () {
-  const {authorizationStatus} = useAppSelector((state) => state);
-  const dispatch = useAppDisptach();
+export function UserAuthorization () {
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const user = useAppSelector(getUserData);
 
-  const clickHandler = (evt: React.MouseEvent<HTMLLIElement>) => {
-    evt.preventDefault();
+  const dispatch = useAppDispatch();
 
-    if (authorizationStatus === AuthorizationStatus.NoAuth) {
-      return;
-    }
+  if(authorizationStatus !== AuthorizationStatus.Auth || user === null){
+    return (
+      <ul className="user-block">
+        <li className="user-block__item">
+          <Link className="user-block__link" to={AppRoute.SignIn}>Sign in</Link>
+        </li>
+      </ul>
+    );
+  }
+
+  const logoutClickHandler = () => {
     dispatch(logoutAction());
   };
 
-  return(
+  return (
     <ul className="user-block">
-      {authorizationStatus === AuthorizationStatus.Auth ?
-        <li className="user-block__item">
+      <li className="user-block__item">
+        <Link to={`${AppRoute.MyList}`}>
           <div className="user-block__avatar">
-            <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
+            <img src={user.avatarUrl} alt="User avatar" width="63" height="63" />
           </div>
-        </li>
-        : null}
-      <li onClick={clickHandler} className="user-block__item">
-        <Link to={authorizationStatus === AuthorizationStatus.Auth ? AppRoute.Main : AppRoute.SignIn} className="user-block__link">{authorizationStatus === AuthorizationStatus.Auth ? 'Sign out' : 'Sign in'}</Link>
+        </Link>
+      </li>
+      <li className="user-block__item">
+        <span className="user-block__link" onClick={logoutClickHandler}>Sign out</span>
       </li>
     </ul>
   );
 }
-

@@ -1,9 +1,13 @@
-import {Route, BrowserRouter, Routes} from 'react-router-dom';
+import {useEffect} from 'react';
+import {Route, Routes} from 'react-router-dom';
+import browserHistory from '../../browser-history';
+import HistoryRouter from '../history-route/history-route';
 import {AppRoute, AuthorizationStatus} from '../../const';
-import {useAppSelector} from '../../hooks';
-import {isCheckedAuth} from '../../reducer';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {getAuthorizationStatus} from '../../store/user-process/selectors';
+import {getFilmsFromServer, getIsDataLoader} from '../../store/film-process/selectors';
+import {loadFilms} from '../../store/film-data/film-data';
 import PrivateRoute from '../private-route/private-route';
-import FilterGenres from '../filter-genres/filter-genres';
 import PageNotFound404 from '../../pages/page-not-found-404/page-not-found-404';
 import AddReview from '../../pages/add-review/add-review';
 import Main from '../../pages/main/main';
@@ -13,32 +17,27 @@ import Player from '../../pages/player/player';
 import SignIn from '../../pages/sign-in/sign-in';
 import LoadingScreen from '../../pages/loading-screen/loading-screen';
 
-type AppProps = {
-  mainFilmName: string;
-  mainFilmGenre: string;
-  mainFilmDate: number;
-}
+export default function App(): JSX.Element {
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const isDataLoaded = useAppSelector(getIsDataLoader);
+  const filmsFromServer = useAppSelector(getFilmsFromServer);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(loadFilms(filmsFromServer));
+  }, [dispatch, filmsFromServer]);
 
-export default function App({mainFilmName, mainFilmGenre, mainFilmDate}: AppProps): JSX.Element {
-  const {authorizationStatus, isDataLoaded} = useAppSelector((state) => state);
-
-  if (isCheckedAuth(authorizationStatus) || isDataLoaded) {
-    return (
-      <LoadingScreen />
-    );
-  }
   return (
-    <BrowserRouter>
+    <HistoryRouter history={browserHistory}>
       <Routes>
         <Route
           path={AppRoute.Main}
-          element = {
-            <Main mainFilmName = {mainFilmName} mainFilmGenre = {mainFilmGenre} mainFilmDate = {mainFilmDate}/>
+          element={
+            (authorizationStatus === AuthorizationStatus.Unknown) || isDataLoaded ? (
+              <LoadingScreen />
+            ) : (
+              <Main />
+            )
           }
-        />
-        <Route
-          path='/:id'
-          element = {<FilterGenres/>}
         />
         <Route
           path={AppRoute.Film}
@@ -46,13 +45,19 @@ export default function App({mainFilmName, mainFilmGenre, mainFilmDate}: AppProp
         />
         <Route
           path={AppRoute.AddReview}
-          element = {<AddReview />}
+          element = {
+            <PrivateRoute
+              authorizationStatus={authorizationStatus}
+            >
+              <AddReview />
+            </PrivateRoute>
+          }
         />
         <Route
           path={AppRoute.MyList}
-          element = {
+          element ={
             <PrivateRoute
-              authorizationStatus={AuthorizationStatus.NoAuth}
+              authorizationStatus={authorizationStatus}
             >
               <MyList />
             </PrivateRoute>
@@ -72,6 +77,6 @@ export default function App({mainFilmName, mainFilmGenre, mainFilmDate}: AppProp
         >
         </Route>
       </Routes>
-    </BrowserRouter>
+    </HistoryRouter>
   );
 }
