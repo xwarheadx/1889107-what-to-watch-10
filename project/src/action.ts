@@ -12,7 +12,7 @@ export const Action = {
   SET_ERROR: 'SET_ERROR',
 };
 
-export const chengeGenreAction = createAction(Action.CHANGE_GENRE, (value)=> ({
+export const changeGenreAction = createAction(Action.CHANGE_GENRE, (value)=> ({
   payload:value,
 }));
 export const getFilmsWithGenreAction = createAction(Action.GET_FILMS_GENRE);
@@ -22,3 +22,6 @@ export const loadFilms = createAction<Films>(Action.LOAD_FILMS);
 export const requireAuthorization = createAction<AuthorizationStatus>(Action.REQUIRE_AUTHORIZATION);
 export const setError = createAction<string | null>(Action.SET_ERROR);
 export const setDataLoadedStatus = createAction<boolean>('setDataLoadedStatus');
+export const redirectToRoute = createAction('app/redirectToRoute', (value: string) => ({
+  payload: value
+}));

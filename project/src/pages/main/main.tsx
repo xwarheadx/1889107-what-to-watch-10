@@ -1,17 +1,26 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useNavigate} from 'react-router-dom';
 import FilterGenres from '../../components/filter-genres/filter-genres';
-import Footer from '../../components/footer/footer';
-import Logo from '../../components/logo/logo';
-import UserAuthorization from '../../components/user-authorization/user-authorization';
+import {Footer} from '../../components/footer/footer';
+import Header from '../../components/header/header';
+import MylistButton from '../../components/my-list-button/my-list-button';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {fetchPromoFilmAction} from '../../store/api-action';
+import {getPromoFilm} from '../../store/film-process/selectors';
 
-type mainFilmInfo = {
-  mainFilmName: string;
-  mainFilmGenre: string;
-  mainFilmDate: number;
-}
+export default function Main(): JSX.Element {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const film = useAppSelector(getPromoFilm);
+  useEffect(() => {
+    dispatch(fetchPromoFilmAction());
+  }, [dispatch]);
 
-export default function Main(props: mainFilmInfo): JSX.Element {
-  const {mainFilmName, mainFilmGenre, mainFilmDate} = props;
+
+  const clickButtonPlayHandler = (evt: React.MouseEvent) => {
+    evt.preventDefault();
+    navigate(`/player/${film?.id}`);
+  };
   return(
     <React.Fragment>
       <div className="visually-hidden">
@@ -52,44 +61,34 @@ export default function Main(props: mainFilmInfo): JSX.Element {
 
       <section className="film-card">
         <div className="film-card__bg">
-          <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel" />
+          <img src={film.backgroundImage} alt={film.name} />
         </div>
 
         <h1 className="visually-hidden">WTW</h1>
 
-        <header className="page-header film-card__head">
-          <Logo />
-
-          <UserAuthorization />
-        </header>
+        <Header />
 
         <div className="film-card__wrap">
           <div className="film-card__info">
             <div className="film-card__poster">
-              <img src="img/the-grand-budapest-hotel-poster.jpg" alt="The Grand Budapest Hotel poster" width="218" height="327" />
+              <img src={film.posterImage} alt="The Grand Budapest Hotel poster" width="218" height="327" />
             </div>
 
             <div className="film-card__desc">
-              <h2 className="film-card__title">{mainFilmName}</h2>
+              <h2 className="film-card__title">{film.name}</h2>
               <p className="film-card__meta">
-                <span className="film-card__genre">{mainFilmGenre}</span>
-                <span className="film-card__year">{mainFilmDate}</span>
+                <span className="film-card__genre">{film.genre}</span>
+                <span className="film-card__year">{film.released}</span>
               </p>
 
               <div className="film-card__buttons">
-                <button className="btn btn--play film-card__button" type="button">
+                <button className="btn btn--play film-card__button" type="button" onClick={clickButtonPlayHandler}>
                   <svg viewBox="0 0 19 19" width="19" height="19">
                     <use xlinkHref="#play-s"></use>
                   </svg>
                   <span>Play</span>
                 </button>
-                <button className="btn btn--list film-card__button" type="button">
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add"></use>
-                  </svg>
-                  <span>My list</span>
-                  <span className="film-card__count">9</span>
-                </button>
+                <MylistButton />
               </div>
             </div>
           </div>
@@ -101,7 +100,6 @@ export default function Main(props: mainFilmInfo): JSX.Element {
           <h2 className="catalog__title visually-hidden">Catalog</h2>
 
           <FilterGenres />
-
         </section>
 
         <Footer />

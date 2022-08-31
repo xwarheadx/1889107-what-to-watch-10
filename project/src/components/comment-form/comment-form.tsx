@@ -1,73 +1,91 @@
 import {ChangeEvent, FormEvent, useState} from 'react';
+import {useParams} from 'react-router-dom';
+import {ReviewTextValidation, NUMBER_OF_STARS} from '../../const';
+import RatingStar from '../rating-star/rating-star';
+import {useAppDispatch} from '../../hooks';
+import {addComment} from '../../store/api-action';
 
 export default function CommentForm () {
+  const dispatch = useAppDispatch();
+  const {id} = useParams();
 
   const [inputData, setInputData] = useState({
-    rating: '',
-    'review-text': '',
+    id: id ? id : '0',
+    rating: 0,
+    comment: '',
+    isDisabled: false,
   });
 
-  const [, setCheck] = useState(0);
-  const inputChangeHandler = (evt: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
+  const isSubmitBtnDisabled = !(inputData.rating !== 0
+    && inputData.comment !== null
+    && inputData.comment.length >= ReviewTextValidation.MinLength
+    && inputData.comment.length <= ReviewTextValidation.MaxLength);
 
-    const {value, name} = evt.target;
-    setCheck(Number(value));
-    setInputData({
-      ...inputData,
-      [name]: value,
-    });
-  };
+  function onFieldChange(evt: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement> ) {
+    const {name, value} = evt.target;
+    setInputData({...inputData, [name]: value});
+  }
 
-  const postForm = (evt: FormEvent<HTMLFormElement>) => {
+  const values = [...Array(NUMBER_OF_STARS).keys()].map((value) => (value += 1)).reverse();
+  const ratingStars = values.map((value: number) => (
+    <RatingStar
+      key={`star-${value}`}
+      value={value}
+      onFieldChange={onFieldChange}
+      rating={inputData.rating}
+      disabled={inputData.isDisabled}
+    />
+  ));
+
+  const handleSubmitForm = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
+
+    if (isSubmitBtnDisabled) {
+      return;
+    }
+
+    dispatch(addComment(inputData));
+    setInputData({...inputData, rating: 0, comment: '', isDisabled: false});
   };
 
-  return(
-    <div className="add-review">
-      <form onSubmit={postForm} action="#" className="add-review__form">
-        <div className="rating">
-          <div className="rating__stars">
-            <input onChange={inputChangeHandler} className="rating__input" id="star-10" type="radio" name="rating" value="10" />
-            <label className="rating__label" htmlFor="star-10">Rating 10</label>
-
-            <input onChange={inputChangeHandler} className="rating__input" id="star-9" type="radio" name="rating" value="9" />
-            <label className="rating__label" htmlFor="star-9">Rating 9</label>
-
-            <input onChange={inputChangeHandler} className="rating__input" id="star-8" type="radio" name="rating" value="8" />
-            <label className="rating__label" htmlFor="star-8">Rating 8</label>
-
-            <input onChange={inputChangeHandler} className="rating__input" id="star-7" type="radio" name="rating" value="7" />
-            <label className="rating__label" htmlFor="star-7">Rating 7</label>
-
-            <input onChange={inputChangeHandler} className="rating__input" id="star-6" type="radio" name="rating" value="6" />
-            <label className="rating__label" htmlFor="star-6">Rating 6</label>
-
-            <input onChange={inputChangeHandler} className="rating__input" id="star-5" type="radio" name="rating" value="5" />
-            <label className="rating__label" htmlFor="star-5">Rating 5</label>
-
-            <input onChange={inputChangeHandler} className="rating__input" id="star-4" type="radio" name="rating" value="4" />
-            <label className="rating__label" htmlFor="star-4">Rating 4</label>
-
-            <input onChange={inputChangeHandler} className="rating__input" id="star-3" type="radio" name="rating" value="3" />
-            <label className="rating__label" htmlFor="star-3">Rating 3</label>
-
-            <input onChange={inputChangeHandler} className="rating__input" id="star-2" type="radio" name="rating" value="2" />
-            <label className="rating__label" htmlFor="star-2">Rating 2</label>
-
-            <input onChange={inputChangeHandler} className="rating__input" id="star-1" type="radio" name="rating" value="1" />
-            <label className="rating__label" htmlFor="star-1">Rating 1</label>
-          </div>
+  return (
+    <form
+      action="#"
+      className="add-review__form"
+      onSubmit={handleSubmitForm}
+    >
+      <div className="rating">
+        <div className="rating__stars" >
+          {ratingStars}
         </div>
+      </div>
 
-        <div className="add-review__text">
-          <textarea onChange={inputChangeHandler} value={inputData['review-text']} className="add-review__textarea" name="review-text" id="review-text" placeholder="Review text"></textarea>
-          <div className="add-review__submit">
-            <button className="add-review__btn" type="submit">Post</button>
-          </div>
-
+      <div className="add-review__text">
+        <textarea
+          className={'add-review__textarea'}
+          name="comment"
+          id="review-text"
+          placeholder="Review text"
+          minLength={ReviewTextValidation.MinLength}
+          maxLength={ReviewTextValidation.MaxLength}
+          value={inputData.comment}
+          onChange={onFieldChange}
+          disabled={inputData.isDisabled}
+        >
+        </textarea>
+        <div className="add-review__submit">
+          <button
+            className={`add-review__btn $disabled {
+              cursor: not-allowed;
+            }}`}
+            type="submit"
+            disabled={isSubmitBtnDisabled || inputData.isDisabled}
+          >
+              Post
+          </button>
         </div>
-      </form>
-    </div>
+      </div>
+    </form>
   );
 }
 

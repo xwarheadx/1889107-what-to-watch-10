@@ -1,5 +1,14 @@
+
 export type UserData = {
-    id: number;
-    email: string;
-    token: string;
-  };
+  avatarUrl: string
+  email: string
+  id: number
+  name: string
+  token: string
+} | null;
+
+export type UserComment = {
+  id: string;
+  rating: number;
+  comment: string;
+};

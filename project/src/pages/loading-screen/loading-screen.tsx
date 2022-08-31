@@ -1,5 +1,5 @@
 import Logo from '../../components/logo/logo';
-import Footer from '../../components/footer/footer';
+import {Footer} from '../../components/footer/footer';
 export default function LoadingScreen(): JSX.Element {
   return (
     <div className="user-page">
