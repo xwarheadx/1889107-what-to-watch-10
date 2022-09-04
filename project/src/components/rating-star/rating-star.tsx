@@ -17,7 +17,6 @@ function RatingStar({value, onFieldChange, rating, disabled}: RatingStarProps): 
         id={`star-${value}`}
         value={value}
         onChange={onFieldChange}
-        checked={rating >= value && undefined}
         disabled={disabled}
       />
       <label

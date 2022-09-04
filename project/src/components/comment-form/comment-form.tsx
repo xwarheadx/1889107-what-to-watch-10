@@ -27,6 +27,7 @@ export default function CommentForm () {
   }
 
   const values = [...Array(NUMBER_OF_STARS).keys()].map((value) => (value += 1)).reverse();
+
   const ratingStars = values.map((value: number) => (
     <RatingStar
       key={`star-${value}`}

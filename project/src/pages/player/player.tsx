@@ -1,12 +1,11 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import {AppRoute, MINS_IN_HOUR} from '../../const';
+import {AppRoute, MINS_IN_HOUR, SECS_IN_HOUR, FULL_TIME_IN_PERCENT, DECIMAL_PLACES} from '../../const';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {fetchAloneFilmAction} from '../../store/api-action';
 import {getAloneFilmFromServer} from '../../store/film-process/selectors';
 
 export default function Player() {
-  const FULL_TIME_IN_PERCENT = 100;
   const dispatch = useAppDispatch();
   const {id} = useParams();
 
@@ -39,19 +38,19 @@ export default function Player() {
       ...stateVideo,
       timeValue: video.current?.currentTime ? Math.floor(video.current.currentTime) : 0
     });
-  }, [stateVideo]);
+  }, []);
 
   function getDurationVideo (duration: number | undefined, currentTime: number | undefined) {
     if (duration && currentTime) {
       const time = Math.floor(duration - currentTime);
-      return `-${Math.floor(time / 3600)}${Math.floor(time % 3600 / MINS_IN_HOUR)}:${time % MINS_IN_HOUR}`;
+      return `-${Math.floor(time / SECS_IN_HOUR)}${Math.floor(time % SECS_IN_HOUR / MINS_IN_HOUR)}:${time % MINS_IN_HOUR}`;
     }
   }
 
   const [currentWatchedPercent, setCurrentWatchedPercent] = useState(0);
   function updateTime () {
     if (video.current?.currentTime || video.current?.duration) {
-      const percent = FULL_TIME_IN_PERCENT * Number((video.current.currentTime).toFixed(2)) / Number((video.current.duration).toFixed(2));
+      const percent = FULL_TIME_IN_PERCENT * Number((video.current.currentTime).toFixed(DECIMAL_PLACES)) / Number((video.current.duration).toFixed(DECIMAL_PLACES));
       setCurrentWatchedPercent(Math.round(percent));
     }
   }
@@ -61,7 +60,7 @@ export default function Player() {
       video.current.addEventListener('timeupdate', updateTime);
       return () => video.current?.removeEventListener('timeupdate', updateTime);
     }
-  },[]);
+  },[video.current]);
 
   const clickPlayPauseHandler = () => {
     if (video.current?.paused) {
@@ -110,7 +109,7 @@ export default function Player() {
       <div className="player__controls">
         <div className="player__controls-row">
           <div className="player__time">
-            <progress className="player__progress" value={`${(Number(video.current?.currentTime.toFixed(3)))}`} max={`${(video.current?.duration ? video.current?.duration : 0)}`}></progress>
+            <progress className="player__progress" value={`${(Number(video.current?.currentTime.toFixed(DECIMAL_PLACES)))}`} max={`${(video.current?.duration ? video.current?.duration : 0)}`}></progress>
             <div className="player__toggler" style={{
               left: `${currentWatchedPercent}%`,
             }}

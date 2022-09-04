@@ -2,11 +2,7 @@ import {getMoreFilms} from '../../store/film-data/film-data';
 import {getIsRenderShowMoreButton} from '../../store/film-data/selectors';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 
-type ShowMoreType = {
-  isMyListPage: boolean;
-};
-
-export function ShowMoreButton ({isMyListPage}: ShowMoreType) {
+export function ShowMoreButton () {
   const isButtonRendered = useAppSelector(getIsRenderShowMoreButton);
   const dispatch = useAppDispatch();
   const clickButtonHandler = () => {

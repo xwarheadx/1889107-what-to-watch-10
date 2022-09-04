@@ -35,7 +35,7 @@ export default function ListFilms (): JSX.Element{
       <div className='catalog__films-list' onMouseOver={mouseOverHandler}>
         {films.map((film) => <FilmCard item={film} key={film.id} />)}
       </div>
-      <ShowMoreButton isMyListPage={films === filmsFavorite}/>
+      <ShowMoreButton />
     </>
   );
 }

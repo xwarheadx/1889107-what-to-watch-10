@@ -1,9 +1,9 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {NameSpace, COUNT_RENDER_FILMS} from '../../const';
+import {NameSpace, COUNT_RENDER_FILMS, DEFAULT_GENRE} from '../../const';
 import {FilmData} from '../../types/state';
 
 const initialState : FilmData = {
-  genre: 'All genres',
+  genre: DEFAULT_GENRE,
   films: [],
   filmsFilteredGenre: [],
   isShowMoreButtonRendered: false,
@@ -20,7 +20,7 @@ export const filmData = createSlice({
       state.genre = action.payload;
     },
     getFilmsWithGenreAction: (state) => {
-      if (state.genre === 'All genres') {
+      if (state.genre === DEFAULT_GENRE) {
         state.filmsFilteredGenre = state.films;
       } else {
         state.filmsFilteredGenre = state.films.filter((film) => film.genre === state.genre);
@@ -28,7 +28,11 @@ export const filmData = createSlice({
 
       const filmsCount = state.filmsFilteredGenre.length;
       state.filmsForRender = state.filmsFilteredGenre.slice(0, COUNT_RENDER_FILMS);
-      state.isShowMoreButtonRendered = filmsCount > state.countRenderedFilms;
+      if (filmsCount > COUNT_RENDER_FILMS) {
+        state.isShowMoreButtonRendered = true;
+      } else {
+        state.isShowMoreButtonRendered = false;
+      }
     },
     getMoreFilms: (state) => {
       const newRenderedMovieCount = Math.max(state.countRenderedFilms, state.countRenderedFilms + COUNT_RENDER_FILMS);
@@ -47,7 +51,7 @@ export const filmData = createSlice({
       state.error = action.payload;
     },
     resetFilterGenreAction: (state) => {
-      state.genre = 'All genres';
+      state.genre = DEFAULT_GENRE;
     },
   },
 });

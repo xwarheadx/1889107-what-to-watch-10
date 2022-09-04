@@ -2,24 +2,29 @@ import {useEffect} from 'react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
 import {Footer} from '../../components/footer/footer';
 import Header from '../../components/header/header';
-import {MoreLikeThisFilms} from '../../components/more-like-this/more-like-this';
+import {MoreLikeThis} from '../../components/more-like-this/more-like-this';
 import MylistButton from '../../components/my-list-button/my-list-button';
 import {Tabs} from '../../components/tabs/tabs';
 import {AuthorizationStatus} from '../../const';
+import {getRegularForCheckId} from '../../utils';
 import {useAppDispatch, useAppSelector} from '../../hooks';
+import useScrollToTop from '../../hooks/use-scroll-to-top';
 import {fetchAloneFilmAction, fetchSimilarFilmAction} from '../../store/api-action';
 import {getAllFilms} from '../../store/film-data/selectors';
 import {getAloneFilmFromServer} from '../../store/film-process/selectors';
 import {getAuthorizationStatus} from '../../store/user-process/selectors';
 
 export default function MoviePage () {
+  useScrollToTop();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const {id} = useParams();
   const allFilms = useAppSelector(getAllFilms);
-  if (Number(id) > allFilms.length) {
-    navigate('*');
-  }
+  if (allFilms.length > 0) {
+    const checkId = new RegExp(getRegularForCheckId(Number(id), allFilms.length)).test(String(id));
+    if (!checkId || Number(id) > allFilms.length) {
+      navigate('*');
+    }}
 
   useEffect(() => {
     if (id) {
@@ -92,7 +97,7 @@ export default function MoviePage () {
       </section>
 
       <div className="page-content">
-        <MoreLikeThisFilms />
+        <MoreLikeThis />
 
         <Footer />
       </div>
